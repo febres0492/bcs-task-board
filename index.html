@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <title>Task Manager UI</title>
+</head>
+<body>
+    <section>
+        <nav class="text-center border">
+            <h2>Task Board</h2>
+            <p class="fw-bold">A simple kanban board for task manager</p>
+        </nav>
+        <div class="container border">
+            <div class="row">
+                <div class="col text-center p-2">
+                    <button id="add-task-btn" class="btn btn-success ">Add task</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="task-column col-md-4 border"></div>
+                <div class="task-column col-md-4 border"></div>
+                <div class="task-column col-md-4 border"></div>
+            </div>
+        </div>
+
+        <!-- modal with tast title, tast due date tast description  -->
+        <div class="modal fade" id="task-modal" tabindex="-1" aria-labelledby="task-modal-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="task-modal-label">Add Task</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body pb-1">
+                        <form id="task-form">
+                            <div class="mb-3">
+                                <label for="task-title" class="form-label">Task Title</label>
+                                <input type="text" class="form-control" id="task-title" name="task-title" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="task-due-date" class="form-label">Due Date</label>
+                                <input type="date" class="form-control" id="task-due-date" name="task-due-date" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="task-description" class="form-label">Task Description</label>
+                                <textarea class="form-control" id="task-description" name="task-description" rows="3"></textarea>
+                            </div>
+                            <div class="modal-footer p-0 pt-1">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button id="modal-submit-btn" type="submit" class="btn btn-primary">Save Task</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- jQuery UI <script> tag -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="./assets/js/main.js"></script>
+</body>
+</html>

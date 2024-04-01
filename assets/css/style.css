@@ -1,0 +1,21 @@
+/* resets */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* body -------------------------------------------------------------------- */
+
+body {
+    min-height: 100vh;
+}
+
+
+/* section ----------------------------------------------------------------- */
+
+.task-column {
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+}
