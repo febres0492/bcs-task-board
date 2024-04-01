@@ -19,3 +19,9 @@ body {
     flex-direction: column;
     min-height: 200px;
 }
+
+
+/* task card ----------------------------------------------------------------- */
+.cur-move {
+    cursor: move;
+}
