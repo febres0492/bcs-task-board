@@ -25,3 +25,8 @@ body {
 .cur-move {
     cursor: move;
 }
+
+.card {
+    user-select: none;
+}
+

@@ -4,10 +4,11 @@ $('#add-task-btn').click(()=> {
     $('#task-modal').modal('show');
 })
 
-// submit task modal
+// adding task card to list
 $('#task-form').submit((ev)=> {
     ev.preventDefault();
 
+    // hidding modal
     $('#task-modal').modal('hide');
 
     //get task data
@@ -27,6 +28,36 @@ $('#task-form').submit((ev)=> {
     `
     $('#task-todo-col').append(str);
 })
+
+// showing draggable card
+$('#task-todo-col').mousemove((ev) => {
+    if(ev.buttons !== 1) return; // return ifleft mouse button is not pressed
+    
+    const card = ev.target.closest('.card');
+    $(card).draggable({ 
+        helper: ()=>{
+            // making clode the same width as the card
+            return $(card).clone().width($(card).outerWidth());
+        },
+        stop: (ev2) => {
+            const pointerPos = { x: ev2.pageX, y: ev2.pageY };
+
+            //getting target card
+            const targetColumn = $('.task-column').get().reverse().find(el => {
+                const elPos = $(el).offset();
+                if(elPos.top < pointerPos.y && elPos.left < pointerPos.x) {
+                    return el
+                }
+            })
+
+            //appending card to target card
+            if(targetColumn){
+                $(targetColumn).append(card);
+            }
+        }
+    });
+});
+
 
 
 // capFirstLetter
