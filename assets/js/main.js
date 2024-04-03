@@ -17,11 +17,14 @@ $('#task-form').submit((ev)=> {
     let taskDate = $('#task-due-date').val()
 
     // formating task date to compare to current date
-    let formattedTaskDate = parseInt(taskDate.split('-').map(v => parseInt(v)).join(''))
+    let formattedTaskDate = parseInt(taskDate.split('-').join(''))
 
-    // getting current date
-    let t = new Date();
-    const currentDate = parseInt([t.getFullYear(), t.getMonth()+1, t.getDate()].join(''))
+    // getting current date and formating it to compare to task date
+    const t = new Date();
+    const year = t.getFullYear().toString();
+    const month = (t.getMonth() + 1).toString().padStart(2, '0');
+    const date = t.getDate().toString().padStart(2, '0');
+    const currentDate = parseInt([year, month, date].join(''));
 
     //default color
     let color = 'light';
@@ -35,6 +38,8 @@ $('#task-form').submit((ev)=> {
     if (formattedTaskDate == currentDate) {
         color = 'warning';
     }
+
+    console.log(currentDate, formattedTaskDate, color)
 
     const str = `
         <div class="card bg-${color} mb-3 cur-move" style="max-width: 18rem;">
@@ -84,6 +89,13 @@ $('#task-todo-col').mousedown((ev) => {
         }
     });
 });
+
+// deleting card
+$('#task-todo-col').click((ev) => {
+    if(ev.target.classList.contains('delete-btn')) {
+        $(ev.target.closest('.card')).remove();
+    }
+})
 
 // capFirstLetter
 function capFirst(str) {
