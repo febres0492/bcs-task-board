@@ -1,4 +1,3 @@
-
 // show task modal
 $('#add-task-btn').click(()=> {
     $('#task-modal').modal('show');
@@ -60,7 +59,7 @@ $('#task-form').submit((ev)=> {
      localStorage.setItem('bcs-tasks', JSON.stringify(data));
 })
 
-$('body').on('mousemove', '.card', (ev)=> {
+$('#main-section').on('mousemove', '.card', (ev)=> {
     
     // returning if ev.button is not 0
     if(ev.button !== 0) return
@@ -101,25 +100,26 @@ $('body').on('mousemove', '.card', (ev)=> {
     }
 });
 
-// hiding dropdown menu on outside click
-$('body').on('click', (ev)=> {
-    if(ev.target.classList.contains('dropdown-label')) return
-    $('.dropdown-menu').hide()
-})
-
 // toggling dropdown
-$('body').on('click', '.dropdown-toggle', (ev)=> {
+$(document).on('click', '.dropdown-toggle', (ev)=> {
     ev.stopPropagation()
     $('.dropdown-menu').hide()
     $(ev.target.nextElementSibling).toggle();
 })
+
+// hiding dropdown menu on outside click
+$(document).on('click', (ev)=> {
+    if(ev.target.classList.contains('dropdown-label')) return
+    $('.dropdown-menu').hide()
+})
+
 // moving task card
-$('body').on('click', '.dropdown-item', (ev)=> {
+$(document).on('click', '.dropdown-item', (ev)=> {
     movingCard(ev.target.closest('.card'), ev.target.value)
 })
 
 //deleting single task
-$('body').on('click', '.delete-btn', (ev)=> {
+$(document).on('click', '.delete-btn', (ev)=> {
     const card = $(ev.target.closest('.card'))
     const idx = card.attr('data-idx');
     const tasks = JSON.parse(localStorage.getItem('bcs-tasks'))
@@ -129,7 +129,7 @@ $('body').on('click', '.delete-btn', (ev)=> {
 })
 
 // deleting all tasks
-$('#delete-all-btn').click(()=> {
+$(document).on('click','#delete-all-btn', ()=> {
     localStorage.removeItem('bcs-tasks');
     $('.card').remove();
 })
@@ -170,6 +170,7 @@ function capFirst(str) {
 }
 
 function movingCard(card, columnId) {
+    //appending card to target column
     $(`#${columnId}`).append(card);
 
     // updating local storage
@@ -177,11 +178,4 @@ function movingCard(card, columnId) {
     const tasks = JSON.parse(localStorage.getItem('bcs-tasks')) || [];
     tasks[idx].column = columnId;
     localStorage.setItem('bcs-tasks', JSON.stringify(tasks));
-
-}
-
-function preventMultipleEvents (el, event = 'clickEvent'){
-    if(el.getAttribute(`data-${event}`)){return true}
-    el.setAttribute(`data-${event}`, true) 
-    return false
 }

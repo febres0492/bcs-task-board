@@ -4,22 +4,36 @@
   padding: 0;
   box-sizing: border-box;
   --color-1:hsl(208, 54%, 78%);
+  --color-2:hsl(208, 44%, 60%);
 }
 
 /* body -------------------------------------------------------------------- */
 
 body {
     min-height: 100vh;
+    background-color: var(--color-1);
 }
 
 
 /* header ---------------------------------------------------------------------- */
 header {
-    background-color: var(--color-1);
+    background-color: var(--color-2);
+}
+
+.bg-dark1 {
+    background-color: rgb(0, 0, 0, 0.2);
 }
 
 
 /* section ----------------------------------------------------------------- */
+
+.box {
+    overflow: hidden;
+}
+
+.title {
+    background-color: var(--color-2);
+}
 
 .task-column {
     display: flex;
@@ -30,8 +44,6 @@ header {
     min-height: 200px;
 }
 
-
-/* task card ----------------------------------------------------------------- */
 .cur-move {
     cursor: move;
 }
@@ -41,8 +53,6 @@ header {
     min-width: 10rem;
 }
 
-
-/* dropdown  ------------------------------------------------------------------ */
 .dropdown { display: inline-block; }
 
 .dropdown-menu {
@@ -52,7 +62,7 @@ header {
     min-width:auto !important;
 
     p{
-        padding-left: 5px;
+        padding-left: px;
         margin: 0;
         background-color: rgb(0, 0, 0, 0.5);
     }
