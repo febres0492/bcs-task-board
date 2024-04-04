@@ -47,11 +47,24 @@ $('#task-form').submit((ev)=> {
             <div class="card-body p-2">
                 <p class="card-text">${taskDescription}</p>
                 <p class="card-date">${taskDate}</p>
-                <button class="delete-btn btn btn-secondary p-1 px-3">Delete</button>
+                <button class="delete-btn btn btn-sm btn-secondary p-1 px-3">Delete</button>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Mark
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">To Do</a>
+                        <a class="dropdown-item" href="#">In Progress</a>
+                        <a class="dropdown-item" href="#">Done</a>
+                    </div>
+                </div>
             </div>
         </div>
     `
     $('#task-todo-col').append(str);
+
+    // handling dropdown
+    handleDropdown();
 })
 
 // showing draggable card
@@ -97,8 +110,16 @@ $('#task-todo-col').click((ev) => {
     }
 })
 
+
+
 // capFirstLetter
 function capFirst(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function handleDropdown() {
+    $('.dropdown').click(() => {
+        $('.dropdown-menu').toggle();
+    })
 }
 
