@@ -47,15 +47,15 @@ $('#task-form').submit((ev)=> {
             <div class="card-body p-2">
                 <p class="card-text">${taskDescription}</p>
                 <p class="card-date">${taskDate}</p>
-                <button class="delete-btn btn btn-sm btn-secondary p-1 px-3">Delete</button>
+                <button class="delete-btn btn btn-sm btn-secondary">Delete</button>
                 <div class="dropdown">
                     <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Mark
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">To Do</a>
-                        <a class="dropdown-item" href="#">In Progress</a>
-                        <a class="dropdown-item" href="#">Done</a>
+                        <button class="dropdown-item" value="task-todo-col">To Do</button>
+                        <button class="dropdown-item" value="task-inProgress-col">In Progress</button>
+                        <button class="dropdown-item" value="task-done-col">Done</button>
                     </div>
                 </div>
             </div>
@@ -110,22 +110,43 @@ $('#task-todo-col').click((ev) => {
     }
 })
 
-// $('#main-section', '.dropdown-menu').click((ev) => {
-//     console.log(ev.target)
-//     if(ev.target.classList.contains('dropdown-menu')) {
-//         ev.target.toggle();
-//     }
-// })
+// hiding openned dropdown menu on outside click
+$('body').click(() => {
+    $('.dropdown-menu').hide()
+})
 
 
-// capFirstLetter
 function capFirst(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 function handleDropdown() {
-    $('.dropdown').click(() => {
-        $('.dropdown-menu').toggle();
+    $('.dropdown').each((i , el) => {
+
+        if(preventMultipleEvents(el)){return}
+        
+        // adding click event to dropdown
+        el.addEventListener('click', (ev) => {
+            $('.dropdown-menu').hide()
+            ev.stopPropagation();
+            $(el.querySelector('.dropdown-menu')).toggle();
+        })
+    })
+
+    $('.dropdown-menu').each((i, el)=>{
+        if(preventMultipleEvents(el)){return}
+        el.addEventListener('click',(ev)=>{
+            ev.stopPropagation()
+            $('.dropdown-menu').hide()
+            const targetColumnId = $(ev.target).val()
+            const card = ev.target.closest('.card')
+            $(`#${targetColumnId}`).append(card)
+        })
     })
 }
 
+function preventMultipleEvents (el, event = 'clickEvent'){
+    if(el.getAttribute(`data-${event}`)){return true}
+    el.setAttribute(`data-${event}`, true) 
+    return false
+}
