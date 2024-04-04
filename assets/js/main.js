@@ -110,6 +110,12 @@ $('#task-todo-col').click((ev) => {
     }
 })
 
+// $('#main-section', '.dropdown-menu').click((ev) => {
+//     console.log(ev.target)
+//     if(ev.target.classList.contains('dropdown-menu')) {
+//         ev.target.toggle();
+//     }
+// })
 
 
 // capFirstLetter
