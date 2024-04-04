@@ -3,6 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  --color-1:hsl(208, 54%, 78%);
 }
 
 /* body -------------------------------------------------------------------- */
@@ -11,15 +12,21 @@ body {
     min-height: 100vh;
 }
 
-/* nav ---------------------------------------------------------------------- */
+
+/* header ---------------------------------------------------------------------- */
+header {
+    background-color: var(--color-1);
+}
 
 
 /* section ----------------------------------------------------------------- */
 
 .task-column {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: space-evenly;
+    gap: 10px;
+    flex-wrap: wrap;
     min-height: 200px;
 }
 
@@ -31,7 +38,7 @@ body {
 
 .card {
     user-select: none;
-    min-width: fit-content;
+    min-width: 10rem;
 }
 
 
@@ -43,6 +50,12 @@ body {
     background-color: var(--bs-secondary);
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     min-width:auto !important;
+
+    p{
+        padding-left: 5px;
+        margin: 0;
+        background-color: rgb(0, 0, 0, 0.5);
+    }
 
     & > * {color: var(--bs-light);}
 }

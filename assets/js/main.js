@@ -39,20 +39,121 @@ $('#task-form').submit((ev)=> {
         color = 'warning';
     }
 
-    console.log(currentDate, formattedTaskDate, color)
+    // getting tasks from local storage
+    let data = JSON.parse(localStorage.getItem('bcs-tasks')) || [];
 
+    // creating task object
+    const obj = {
+        idx: data.length,
+        title: tasTitle,
+        description: taskDescription,
+        date: taskDate,
+        color: color,
+        column: 'task-todo-col',
+    }
+
+    // appending task card to column
+    $('#task-todo-col').append(htmlString(obj));
+
+     // saving the object to local storage
+     data.push(obj);
+     localStorage.setItem('bcs-tasks', JSON.stringify(data));
+})
+
+$('body').on('mousemove', '.card', (ev)=> {
+    
+    // returning if ev.button is not 0
+    if(ev.button !== 0) return
+
+    // showing draggable card
+    const card = ev.target.closest('.card');
+    if(card){
+        $(card).draggable({ 
+            helper: ()=>{
+                
+                // making clode the same width as the card
+                const cloneCard = $(card).clone().width($(card).outerWidth());
+                cloneCard.css('z-index', '20');
+                return cloneCard;
+            },
+            start: () => {
+                // changing card opacity
+                $(card).css('opacity', '0.5')
+            },
+            stop: (ev2) => {
+                const pointerPos = { x: ev2.pageX, y: ev2.pageY };
+    
+                //getting target car d
+                const targetColumn = $('.task-column').get().reverse().find(el => {
+                    const elPos = $(el).offset();
+                    if(elPos.top < pointerPos.y && elPos.left < pointerPos.x) {
+                        return el
+                    }
+                })
+    
+                //appending card to target card
+                if(targetColumn){
+                    movingCard(card, targetColumn.id)
+                    $(card).css('opacity', '1')
+                }
+            }
+        });
+    }
+});
+
+// hiding dropdown menu on outside click
+$('body').on('click', (ev)=> {
+    if(ev.target.classList.contains('dropdown-label')) return
+    $('.dropdown-menu').hide()
+})
+
+// toggling dropdown
+$('body').on('click', '.dropdown-toggle', (ev)=> {
+    ev.stopPropagation()
+    $('.dropdown-menu').hide()
+    $(ev.target.nextElementSibling).toggle();
+})
+// moving task card
+$('body').on('click', '.dropdown-item', (ev)=> {
+    movingCard(ev.target.closest('.card'), ev.target.value)
+})
+
+//deleting single task
+$('body').on('click', '.delete-btn', (ev)=> {
+    const card = $(ev.target.closest('.card'))
+    const idx = card.attr('data-idx');
+    const tasks = JSON.parse(localStorage.getItem('bcs-tasks'))
+    tasks.splice(idx, 1)
+    localStorage.setItem('bcs-tasks', JSON.stringify(tasks));
+    card.remove();
+})
+
+// deleting all tasks
+$('#delete-all-btn').click(()=> {
+    localStorage.removeItem('bcs-tasks');
+    $('.card').remove();
+})
+
+//loading task cards fromlocal storage
+$(()=>{
+    const tasks = JSON.parse(localStorage.getItem('bcs-tasks')) || [];
+    tasks.forEach(task => {
+        $(`#${task.column}`).append(htmlString(task));
+    })
+})
+
+function htmlString(obj){
     const str = `
-        <div class="card bg-${color} mb-3 cur-move" style="max-width: 18rem;">
-            <div class="card-header p-1 fw-bold">${tasTitle}</div>
+        <div class="card bg-${obj.color} mb-3 cur-move" style="max-width: 18rem;" data-idx="${obj.idx}">
+            <div class="card-header p-1 fw-bold">${obj.title}</div>
             <div class="card-body p-2">
-                <p class="card-text">${taskDescription}</p>
-                <p class="card-date">${taskDate}</p>
+                <p class="card-text">${obj.description}</p>
+                <p class="card-date">${obj.date}</p>
                 <button class="delete-btn btn btn-sm btn-secondary">Delete</button>
                 <div class="dropdown">
-                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Mark
-                    </button>
+                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <p class="dropdown-label">Mark as:</p>
                         <button class="dropdown-item" value="task-todo-col">To Do</button>
                         <button class="dropdown-item" value="task-inProgress-col">In Progress</button>
                         <button class="dropdown-item" value="task-done-col">Done</button>
@@ -61,88 +162,22 @@ $('#task-form').submit((ev)=> {
             </div>
         </div>
     `
-    $('#task-todo-col').append(str);
-
-    // handling dropdown
-    handleDropdown();
-})
-
-// showing draggable card
-$('#task-todo-col').mousedown((ev) => {
-    if(ev.buttons !== 1) return; // return ifleft mouse button is not pressed
-    
-    const card = ev.target.closest('.card');
-    $(card).draggable({ 
-        helper: ()=>{
-            // making clode the same width as the card
-            const cloneCard = $(card).clone().width($(card).outerWidth());
-            cloneCard.css('z-index', '20');
-            return cloneCard;
-        },
-        start: () => {
-            // changing card opacity
-            $(card).css('opacity', '0.5')
-        },
-        stop: (ev2) => {
-            const pointerPos = { x: ev2.pageX, y: ev2.pageY };
-
-            //getting target car d
-            const targetColumn = $('.task-column').get().reverse().find(el => {
-                const elPos = $(el).offset();
-                if(elPos.top < pointerPos.y && elPos.left < pointerPos.x) {
-                    return el
-                }
-            })
-
-            //appending card to target card
-            if(targetColumn){
-                $(targetColumn).append(card);
-                $(card).css('opacity', '1')
-            }
-        }
-    });
-});
-
-// deleting card
-$('#task-todo-col').click((ev) => {
-    if(ev.target.classList.contains('delete-btn')) {
-        $(ev.target.closest('.card')).remove();
-    }
-})
-
-// hiding openned dropdown menu on outside click
-$('body').click(() => {
-    $('.dropdown-menu').hide()
-})
-
+    return str
+}
 
 function capFirst(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function handleDropdown() {
-    $('.dropdown').each((i , el) => {
+function movingCard(card, columnId) {
+    $(`#${columnId}`).append(card);
 
-        if(preventMultipleEvents(el)){return}
-        
-        // adding click event to dropdown
-        el.addEventListener('click', (ev) => {
-            $('.dropdown-menu').hide()
-            ev.stopPropagation();
-            $(el.querySelector('.dropdown-menu')).toggle();
-        })
-    })
+    // updating local storage
+    const idx = card.getAttribute('data-idx');
+    const tasks = JSON.parse(localStorage.getItem('bcs-tasks')) || [];
+    tasks[idx].column = columnId;
+    localStorage.setItem('bcs-tasks', JSON.stringify(tasks));
 
-    $('.dropdown-menu').each((i, el)=>{
-        if(preventMultipleEvents(el)){return}
-        el.addEventListener('click',(ev)=>{
-            ev.stopPropagation()
-            $('.dropdown-menu').hide()
-            const targetColumnId = $(ev.target).val()
-            const card = ev.target.closest('.card')
-            $(`#${targetColumnId}`).append(card)
-        })
-    })
 }
 
 function preventMultipleEvents (el, event = 'clickEvent'){
