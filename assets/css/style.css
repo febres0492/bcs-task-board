@@ -27,10 +27,6 @@ header {
 
 /* section ----------------------------------------------------------------- */
 
-.box {
-    overflow: hidden;
-}
-
 .title {
     background-color: var(--color-2);
 }
